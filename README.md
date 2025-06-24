@@ -1,18 +1,125 @@
 # GUÍA DE ORGANIZACIÓN - PROYECTO INTEGRADOR
 ## Sistema de Gestión de Biblioteca - Estructura de Datos 2025
 
-**OBJETIVO PRINCIPAL:** Implementar un sistema completo de gestión de biblioteca utilizando arreglos, pilas, colas, listas enlazadas y árboles AVL, con trabajo colaborativo y sincronizado entre 4 integrantes.
+**OBJETIVO PRINCIPAL:** Desarrollar un sistema de gestión de biblioteca que implemente registro/búsqueda de libros y usuarios, operaciones de préstamo/devolución, cola de espera para libros no disponibles, sistema de reversión de acciones, y consultas dinámicas mediante arreglos, árboles BST/AVL, pilas, colas y listas enlazadas.
 
 ---
 
 ## 👥 INTEGRANTES DEL EQUIPO
 
-| Integrante | Rol Principal | Responsabilidades Secundarias |
-|------------|---------------|-------------------------------|
-| **Calatayud, Alex Gabriel** | Líder Técnico & Árboles | Coordinación general, integración |
-| **SAAVEDRA, LEANDRO ARIEL** | Especialista en Arreglos & Usuarios | Testing y validaciones |
-| **Torres, Rodrigo Emiliano** | Especialista en Pilas & Colas | Documentación técnica |
-| **Lamas, Javier Ramiro** | Especialista en Listas Enlazadas | Control de calidad y pruebas |
+| Integrante | Estructura Asignada | Funcionalidades Específicas |
+|------------|-------------------|------------------------------|
+| **Calatayud, Alex Gabriel** | Árboles BST/AVL | Búsqueda eficiente de libros por código, inserción ordenada, recorridos |
+| **Saavedra, Leandro Ariel** | Arreglos | Catálogo completo de libros, registro de usuarios, validaciones |
+| **Torres, Rodrigo Emiliano** | Pilas y Colas | Sistema de reversión (deshacer), cola de espera para libros |
+| **Lamas, Javier Ramiro** | Listas Enlazadas | Consultas por autor, filtrado de usuarios activos |
+
+---
+
+## 📋 DIVISIÓN DETALLADA DE TAREAS
+
+### 🌳 Alex Gabriel Calatayud - ÁRBOLES BST/AVL
+
+#### Funcionalidades del Sistema:
+- **Búsqueda eficiente de libros por código** mediante árbol binario de búsqueda
+- **Inserción ordenada** de nuevos libros manteniendo propiedades BST
+- **Recorrido inorden** para mostrar catálogo ordenado por código
+- **Balanceo automático** con rotaciones AVL cuando sea necesario
+- **Eliminación de libros** con reestructuración del árbol
+
+#### Entregables Específicos:
+```java
+// ArbolBST.java - Funcionalidades principales
+public boolean insertarLibro(int codigo, String titulo, String autor, double precio)
+public Libro buscarLibroPorCodigo(int codigo)
+public boolean eliminarLibro(int codigo)
+public List<Libro> obtenerCatalogoOrdenado()
+public boolean verificarDisponibilidad(int codigo)
+
+// ArbolAVL.java - Extensión con balanceo
+private NodoArbol rotacionSimpleDerecha(NodoArbol nodo)
+private NodoArbol rotacionSimpleIzquierda(NodoArbol nodo)
+private int calcularFactorBalance(NodoArbol nodo)
+public void rebalancearSiEsNecesario()
+```
+
+### 📚 Saavedra, Leandro Ariel - ARREGLOS
+
+#### Funcionalidades del Sistema:
+- **Almacenamiento del catálogo completo** en arreglo para visualización rápida
+- **Registro de nuevos usuarios** con validación de datos únicos
+- **Gestión de disponibilidad** de libros en el arreglo principal
+- **Validaciones de códigos únicos** tanto para libros como usuarios
+- **Actualización de cantidades** de libros prestados por usuario
+
+#### Entregables Específicos:
+```java
+// GestorLibros.java - Arreglo principal
+public boolean registrarLibro(int codigo, String titulo, String autor, double precio)
+public void mostrarCatalogoCompleto()
+public boolean marcarComoNoDisponible(int codigo)
+public boolean marcarComoDisponible(int codigo)
+public double calcularMontoTotalPrestamos()
+
+// GestorUsuarios.java - Gestión de usuarios
+public boolean registrarUsuario(int numeroUsuario, String dni, String nombre, String direccion, String telefono)
+public Usuario buscarUsuarioPorNumero(int numeroUsuario)
+public void incrementarLibrosPrestados(int numeroUsuario)
+public void decrementarLibrosPrestados(int numeroUsuario)
+public boolean validarCodigoUnico(int codigo)
+```
+
+### 🔄 Torres, Rodrigo Emiliano - PILAS & COLAS
+
+#### Funcionalidades del Sistema:
+- **Sistema de reversión** guardando operaciones en pila para función "deshacer"
+- **Cola de espera** para usuarios que solicitan libros no disponibles
+- **Procesamiento automático** de pendientes cuando hay disponibilidad
+- **Registro de operaciones** con timestamp y detalles completos
+- **Gestión de prioridades** en cola FIFO
+
+#### Entregables Específicos:
+```java
+// PilaAcciones.java - Sistema de reversión
+public void registrarOperacion(String tipo, int codigoLibro, int numeroUsuario, Date fecha)
+public boolean revertirUltimaOperacion()
+public Operacion verUltimaOperacion()
+public boolean hayOperacionesParaRevertir()
+
+// ColaPendientes.java - Gestión de espera
+public void agregarUsuarioEnEspera(int numeroUsuario, int codigoLibro)
+public Usuario procesarSiguientePendiente()
+public boolean hayUsuariosEnEspera()
+public int cantidadUsuariosEnEspera()
+public void notificarDisponibilidad(int codigoLibro)
+```
+
+### 🔗 Lamas, Javier Ramiro - LISTAS ENLAZADAS
+
+#### Funcionalidades del Sistema:
+- **Búsqueda de libros por autor** usando subcadenas en lista enlazada
+- **Filtrado de usuarios activos** con N o más libros prestados
+- **Consultas dinámicas** que se construyen según criterios variables
+- **Generación de reportes** personalizados con listas de resultados
+- **Operaciones de filtrado** avanzadas con múltiples criterios
+
+#### Entregables Específicos:
+```java
+// ListaLibrosAutor.java - Consultas por autor
+public ListaEnlazada<Libro> buscarLibrosPorAutor(String subcadenaAutor)
+public void agregarResultado(Libro libro)
+public int contarResultados()
+public void limpiarResultados()
+
+// ListaUsuariosActivos.java - Consultas de usuarios
+public ListaEnlazada<Usuario> obtenerUsuariosConMinimoPrestamos(int minimoLibros)
+public void filtrarPorCantidadPrestamos(int cantidad)
+public double calcularPromedioPrestamosPorUsuario()
+public void generarReporteUsuariosActivos()
+
+// ConsultasDinamicas.java - Motor de consultas
+public ListaEnlazada<Object> ejecutarConsultaPersonalizada(String criterio, Object valor)
+```
 
 ---
 
@@ -124,7 +231,7 @@ public class ColaPendientes {
     public void encolar(Usuario usuario)
     public Usuario desencolar()
     public boolean estaLlena()
-    public int obtenerTamaño()
+public int obtenerTamaño()
 }
 ```
 
